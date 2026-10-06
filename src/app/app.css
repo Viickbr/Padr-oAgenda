@@ -1,0 +1,49 @@
+/* cabecalho: faixa azul de ponta a ponta, conteudo centralizado dentro */
+
+.topo {
+  background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro));
+  border-bottom: 3px solid var(--ouro);
+  padding: 22px 0 0;
+  margin-bottom: 32px;
+}
+
+.faixa {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.topo h1 {
+  margin: 0;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+.menu {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #c9dcf3;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-bottom: 3px solid transparent;
+}
+
+.menu a:hover {
+  color: #fff;
+}
+
+.menu a.ativo {
+  color: #fff;
+  font-weight: 600;
+  border-bottom-color: var(--ouro);
+}
+
+.conteudo {
+  padding-bottom: 64px;
+}

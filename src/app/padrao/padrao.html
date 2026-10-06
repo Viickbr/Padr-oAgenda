@@ -1,0 +1,266 @@
+<!--
+  TEMPLATE DE REFERENCIA
+
+  Todo campo segue O MESMO bloco de tres partes:
+
+      <label for="x">        o rotulo, sempre visivel
+      <input  id="x" name="x" [(ngModel)] (blur)      o controle
+      @if (deveMostrar('x')) { <small class="erro"> }  a mensagem
+
+  O `for` do label precisa casar com o `id` do controle: clicar no texto
+  tem de focar o campo. O `name` e para o Angular; sao coisas diferentes.
+-->
+
+<header class="cabeca">
+  <h2>{{ titulo }}</h2>
+  <p>Componente de referência: campos, validações e regras cruzadas.</p>
+</header>
+
+<form class="ficha" (ngSubmit)="salvar()" novalidate>
+
+  @if (temErro) {
+    <p class="resumo erro">{{ quantidadeDeErros }} campo(s) com erro</p>
+  } @else {
+    <p class="resumo ok">Tudo certo</p>
+  }
+
+  <!-- ====================== IDENTIFICACAO ====================== -->
+  <fieldset>
+    <legend>Identificacao</legend>
+
+    <div class="campo">
+      <label for="nome">Nome completo</label>
+      <input id="nome" name="nome" type="text"
+             [(ngModel)]="rascunho.nome"
+             [class.invalido]="deveMostrar('nome')"
+             (blur)="marcarTocado('nome')">
+      @if (deveMostrar('nome')) {
+        <small class="erro">{{ mensagem('nome') }}</small>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="dataNascimento">Data de nascimento</label>
+      <input id="dataNascimento" name="dataNascimento" type="date"
+             [(ngModel)]="rascunho.dataNascimento"
+             [class.invalido]="deveMostrar('dataNascimento')"
+             (blur)="marcarTocado('dataNascimento')">
+      @if (deveMostrar('dataNascimento')) {
+        <small class="erro">{{ mensagem('dataNascimento') }}</small>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="genero">Genero</label>
+      <select id="genero" name="genero"
+              [(ngModel)]="rascunho.genero"
+              [class.invalido]="deveMostrar('genero')"
+              (blur)="marcarTocado('genero')">
+        <option value="">Selecione...</option>
+        <option value="feminino">Feminino</option>
+        <option value="masculino">Masculino</option>
+        <option value="outro">Outro</option>
+        <option value="nao_informado">Prefiro nao informar</option>
+      </select>
+      @if (deveMostrar('genero')) {
+        <small class="erro">{{ mensagem('genero') }}</small>
+      }
+    </div>
+  </fieldset>
+
+  <!-- ========================= CONTATO ========================= -->
+  <fieldset>
+    <legend>Contato</legend>
+
+    <div class="campo">
+      <label for="email">E-mail</label>
+      <input id="email" name="email" type="email"
+             placeholder="nome@exemplo.com"
+             [(ngModel)]="rascunho.email"
+             [class.invalido]="deveMostrar('email')"
+             (blur)="marcarTocado('email')">
+      @if (deveMostrar('email')) {
+        <small class="erro">{{ mensagem('email') }}</small>
+      }
+      <small class="dica">O placeholder mostra o FORMATO. Ele nunca substitui o rotulo.</small>
+    </div>
+
+    <div class="campo">
+      <label for="telefone">
+        Telefone
+        @if (rascunho.vinculo !== 'professor') {
+          <span class="opcional">(opcional)</span>
+        }
+      </label>
+      <input id="telefone" name="telefone" type="tel"
+             placeholder="(71) 90000-0000"
+             [(ngModel)]="rascunho.telefone"
+             [class.invalido]="deveMostrar('telefone')"
+             (blur)="marcarTocado('telefone')">
+      @if (deveMostrar('telefone')) {
+        <small class="erro">{{ mensagem('telefone') }}</small>
+      }
+      <small class="dica">Regra cruzada: vira obrigatorio quando o vinculo e "professor".</small>
+    </div>
+
+    <div class="campo">
+      <label for="cep">CEP</label>
+      <input id="cep" name="cep" type="text"
+             placeholder="00000-000"
+             [(ngModel)]="rascunho.cep"
+             [class.invalido]="deveMostrar('cep')"
+             (blur)="marcarTocado('cep')">
+      @if (deveMostrar('cep')) {
+        <small class="erro">{{ mensagem('cep') }}</small>
+      }
+    </div>
+  </fieldset>
+
+  <!-- ==================== VINCULO ACADEMICO ==================== -->
+  <fieldset>
+    <legend>Vinculo academico</legend>
+
+    <div class="campo">
+      <span class="rotulo-grupo">Vinculo</span>
+      <div class="opcoes">
+        <label for="vinculoAluno">
+          <input id="vinculoAluno" name="vinculo" type="radio" value="aluno"
+                 [(ngModel)]="rascunho.vinculo"
+                 (blur)="marcarTocado('vinculo')">
+          Aluno
+        </label>
+        <label for="vinculoProfessor">
+          <input id="vinculoProfessor" name="vinculo" type="radio" value="professor"
+                 [(ngModel)]="rascunho.vinculo"
+                 (blur)="marcarTocado('vinculo')">
+          Professor
+        </label>
+        <label for="vinculoConvidado">
+          <input id="vinculoConvidado" name="vinculo" type="radio" value="convidado"
+                 [(ngModel)]="rascunho.vinculo"
+                 (blur)="marcarTocado('vinculo')">
+          Convidado
+        </label>
+      </div>
+      @if (deveMostrar('vinculo')) {
+        <small class="erro">{{ mensagem('vinculo') }}</small>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="curso">Curso</label>
+      <select id="curso" name="curso"
+              [(ngModel)]="rascunho.curso"
+              [class.invalido]="deveMostrar('curso')"
+              (blur)="marcarTocado('curso')">
+        <option value="">Selecione...</option>
+        @for (c of cursos; track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
+      @if (deveMostrar('curso')) {
+        <small class="erro">{{ mensagem('curso') }}</small>
+      }
+      <small class="dica">O &#64;for monta as opcoes. A lista mora na classe, nao no HTML.</small>
+    </div>
+
+    <!-- Estes dois so aparecem para aluno: a propria TELA reage ao vinculo -->
+    @if (rascunho.vinculo === 'aluno') {
+      <div class="campo">
+        <label for="matricula">Matricula</label>
+        <input id="matricula" name="matricula" type="text"
+               [(ngModel)]="rascunho.matricula"
+               [class.invalido]="deveMostrar('matricula')"
+               (blur)="marcarTocado('matricula')">
+        @if (deveMostrar('matricula')) {
+          <small class="erro">{{ mensagem('matricula') }}</small>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="semestre">Semestre</label>
+        <input id="semestre" name="semestre" type="number" min="1" max="10"
+               [(ngModel)]="rascunho.semestre"
+               [class.invalido]="deveMostrar('semestre')"
+               (blur)="marcarTocado('semestre')">
+        @if (deveMostrar('semestre')) {
+          <small class="erro">{{ mensagem('semestre') }}</small>
+        }
+      </div>
+    }
+  </fieldset>
+
+  <!-- =================== ACESSO E PREFERENCIAS ================== -->
+  <fieldset>
+    <legend>Acesso e preferencias</legend>
+
+    <div class="campo">
+      <label for="senha">Senha</label>
+      <input id="senha" name="senha" type="password"
+             [(ngModel)]="rascunho.senha"
+             [class.invalido]="deveMostrar('senha')"
+             (blur)="marcarTocado('senha')">
+      @if (deveMostrar('senha')) {
+        <small class="erro">{{ mensagem('senha') }}</small>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="confirmarSenha">Repita a senha</label>
+      <input id="confirmarSenha" name="confirmarSenha" type="password"
+             [(ngModel)]="rascunho.confirmarSenha"
+             [class.invalido]="deveMostrar('confirmarSenha')"
+             (blur)="marcarTocado('confirmarSenha')">
+      @if (deveMostrar('confirmarSenha')) {
+        <small class="erro">{{ mensagem('confirmarSenha') }}</small>
+      }
+      <small class="dica">Existe na tela e NAO existe no modelo: ninguem guarda confirmacao de senha.</small>
+    </div>
+
+    <div class="campo">
+      <label for="receberEmails" class="inline">
+        <input id="receberEmails" name="receberEmails" type="checkbox"
+               [(ngModel)]="rascunho.receberEmails">
+        Quero receber e-mails da instituicao
+      </label>
+    </div>
+
+    <div class="campo">
+      <label for="observacoes">Observacoes <span class="opcional">(opcional)</span></label>
+      <textarea id="observacoes" name="observacoes" rows="3" maxlength="300"
+                [(ngModel)]="rascunho.observacoes"
+                [class.invalido]="deveMostrar('observacoes')"
+                (blur)="marcarTocado('observacoes')"></textarea>
+      <small class="contador">{{ rascunho.observacoes.length }}/300</small>
+      @if (deveMostrar('observacoes')) {
+        <small class="erro">{{ mensagem('observacoes') }}</small>
+      }
+    </div>
+  </fieldset>
+
+  <div class="acoes">
+    <button type="submit" [disabled]="temErro">Salvar</button>
+    <button type="button" class="secundario" (click)="limpar()">Limpar</button>
+  </div>
+  <small class="dica aviso">
+    O botão desabilitado é conforto, não segurança: quem quiser burla pelo DevTools.
+    Quem protege de verdade é o servidor.
+  </small>
+</form>
+
+<!-- ========================= RESULTADO ========================= -->
+<section class="lista">
+  <h3>Cadastrados ({{ cadastrados.length }})</h3>
+
+  @for (c of cadastrados; track c.id) {
+    <article class="cartao">
+      <div>
+        <b>{{ c.nome }}</b>
+        <span>{{ c.email }} &middot; {{ c.vinculo }} &middot; {{ c.curso }}</span>
+      </div>
+      <button type="button" class="secundario" (click)="remover(c.id)">Remover</button>
+    </article>
+  } @empty {
+    <p class="vazio">Nenhum cadastro ainda. Preencha a ficha acima.</p>
+  }
+</section>
